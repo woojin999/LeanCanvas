@@ -1,7 +1,7 @@
 import React from 'react';
 import CanvasItem from './CanvasItem';
 
-function CanvasList({filteredData,searchText,isGridView}) {
+function CanvasList({ filteredData, searchText, isGridView, onDeleteItem }) {
   if (filteredData.length === 0) {
     return (
       <div className="text-center py-10">
@@ -22,6 +22,10 @@ function CanvasList({filteredData,searchText,isGridView}) {
           id={item.id}
           lastModified={item.lastModified}
           title={item.title}
+          onDelete={e => {
+            e.preventDefault();
+            onDeleteItem(item.id);
+          }}
         />
       ))}
     </div>
