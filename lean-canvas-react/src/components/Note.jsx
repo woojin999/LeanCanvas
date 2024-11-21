@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AiOutlineClose, AiOutlineCheck } from 'react-icons/ai';
 
-const Note = ({ id, onRemoveNote }) => {
+const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
   const colorOptions = [
     'bg-yellow-300',
     'bg-pink-300',
@@ -9,15 +9,18 @@ const Note = ({ id, onRemoveNote }) => {
     'bg-green-300',
   ];
 
-  // 0,1,2,3
-  const randomIndex = Math.floor(Math.random() * colorOptions.length);
-
-  const [color,setColor] = useState(colorOptions[randomIndex]);
+  
+  const [color, setColor] = useState(() => {
+    if (initalColor) return initalColor;
+    
+    // 0,1,2,3
+    const randomIndex = Math.floor(Math.random() * colorOptions.length);
+    return colorOptions[randomIndex];
+  });
 
   const [isEditing, setIsEditing] = useState(false);
 
   const textareaRef = useRef(null);
-  const [content, setContent] = useState('');
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height =
@@ -55,7 +58,6 @@ const Note = ({ id, onRemoveNote }) => {
       <textarea
         ref={textareaRef}
         value={content}
-        onChange={e => setContent(e.target.value)}
         className={`w-full h-full bg-transparent resize-none border-none focus:outline-none text-gray-900 overflow-hidden`}
         aria-label="Edit Note"
         placeholder="메모를 작성하세요."
@@ -68,7 +70,7 @@ const Note = ({ id, onRemoveNote }) => {
             <button
               key={index}
               className={`w-6 h-6 rounded-full cursor-pointer outline outline-gray-50 ${option}`}
-              onClick={()=>setColor(option)}
+              onClick={() => setColor(option)}
               aria-label={`Change color to ${option}`}
             />
           ))}
