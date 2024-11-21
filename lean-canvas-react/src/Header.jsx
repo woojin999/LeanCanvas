@@ -7,6 +7,7 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import { useState } from 'react';
+import Button from './components/Button';
 
 function Header() {
   // const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   return (
-    <header className="sticky top-0 bg-gray-800 text-white px-4 z-30">
+    <header className="sticky top-0 bg-gray-500 text-white px-4 z-30">
       <div className="container mx-auto flex justify-between items-center h-14">
         <div>
           <Link to="/" className="text-xl font-bold">
@@ -27,7 +28,7 @@ function Header() {
         </div>
         <nav className="hidden md:flex space-x-4">
           {navItems.map(item => (
-            <NavLink key={item.id} to={item.to} className="hover:text-gray-300">
+            <NavLink key={item.id} to={item.to} className="hover:text-gray-800">
               {item.label}
             </NavLink>
           ))}
@@ -35,9 +36,8 @@ function Header() {
         <button className="md:hidden" onClick={toggleMenu}>
           <FaBars />
         </button>
-        <button className="hidden md:block bg-blue-500 hover:bg-blue-600 text-white font-bold py-1.5 px-4 rounded transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-          Woojin
-        </button>
+       <Button className="hidden md:block">Woojin</Button>
+      
       </div>
       {/* Mobile Menu */}
       <aside

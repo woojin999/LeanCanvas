@@ -1,58 +1,97 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CanvasList from '../components/CanvasList';
 import SearchBar from '../components/SearchBar';
 import ViewToggle from '../components/ViewToggle';
+import { createCanvas, deleteCanvas, getCanvases } from '../api/canvas';
+import Loading from '../components/Loading';
+import Error from '../components/Error';
+import Button from '../components/Button';
 
 function Home() {
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState();
   const [isGridView, setIsGridView] = useState(true);
-  const [dummyData,setDummyData] = useState([
-    {
-      id: 1,
-      title: '친환경 도시 농업 플랫폼',
-      lastModified: '2024-11-15',
-      category: '농업',
-    },
-    {
-      id: 2,
-      title: 'AI 기반 건강 관리 앱',
-      lastModified: '2024-11-10',
-      category: '헬스케어',
-    },
-    {
-      id: 3,
-      title: '온디맨드 물류 서비스',
-      lastModified: '2024-11-05',
-      category: '물류',
-    },
-    {
-      id: 4,
-      title: 'VR 가상 여행 서비스',
-      lastModified: '2024-11-15',
-      category: '여행',
-    },
-  ]);
-  
-  const handleDeleteItem = (id) =>{
-    setDummyData(dummyData.filter(item => item.id !== id));
-  }
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filteredData = dummyData.filter(item =>
-    item.title.toLowerCase().includes(searchText.toLowerCase()),
-  );
+  async function fetchData(params) {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await new Promise(resolver => setTimeout(resolver, 1000));
+      const response = await getCanvases(params);
+      setData(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  useEffect(() => {
+    fetchData({ title_like: searchText });
+  }, [searchText]);
+
+  const handleDeleteItem = async id => {
+    if (confirm('삭제 하시겠습니까?') === false) {
+      return
+    }
+    // delete
+    try {
+      await deleteCanvas(id);
+      fetchData({ title_like: searchText })
+    } catch (error) {
+     alert(err.message); 
+    }
+   
+  };
+
+  // const filteredData = data.filter(item =>
+  //   item.title.toLowerCase().includes(searchText.toLowerCase()),
+  // );
+
+  const [isLoadingCreate, setIsLoadingCreate] = useState(false);
+  const handleCreateCanvas = async () => {
+    try {
+      setIsLoadingCreate(true);
+      await new Promise(resolver => setTimeout(resolver, 1000));
+      await createCanvas();
+      fetchData({ title_like: searchText });
+    } catch (error) {
+      alert(err.message);
+    } finally {
+      setIsLoadingCreate(false);
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 py-16">
+    <>
       <div className="mb-6 flex flex-col sm:flex-row items-center justify-between">
         <SearchBar searchText={searchText} setSearchText={setSearchText} />
         <ViewToggle setIsGridView={setIsGridView} isGridView={isGridView} />
       </div>
-      <CanvasList
-        filteredData={filteredData}
-        isGridView={isGridView}
-        searchText={searchText}
-        onDeleteItem={handleDeleteItem}
-      />
-    </div>
+      <div className="flex justify-end mb-6">
+        <Button onClick={handleCreateCanvas} loading={isLoadingCreate}>
+          등록하기
+        </Button>
+      </div>
+      {isLoading && <Loading />}
+      {error && (
+        <Error
+          message={error.message}
+          onRetry={() => {
+            fetchData({ title_like: searchText });
+          }}
+        />
+      )}
+      {!isLoading && !error && (
+        <CanvasList
+          filteredData={data}
+          isGridView={isGridView}
+          searchText={searchText}
+          onDeleteItem={handleDeleteItem}
+        />
+      )}
+    </>
   );
 }
 
