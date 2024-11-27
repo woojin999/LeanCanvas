@@ -1,4 +1,4 @@
-import { useNavigate, Link, NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import {
   FaEnvelope,
   FaHome,
