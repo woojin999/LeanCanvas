@@ -33,17 +33,17 @@
         "notes": [
           {
             "id": "p1",
-            "content": "기존 스마트홈 시스템의 복잡성",
-            "color": "bg-yellow-300"
+            "content": "기존 스마트홈 시스템의 복잡da성ddddad\n",
+            "color": "bg-green-300"
           },
           {
             "id": "p2",
-            "content": "높은 초기 설치 비용",
+            "content": "높은 초기 설치 비용sdsds",
             "color": "bg-pink-300"
           },
           {
             "id": "p3",
-            "content": "다양한 기기 간 호환성 문제",
+            "content": "다양한 기기 간 호a환성 문제sd\n",
             "color": "bg-blue-300"
           }
         ]

@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { AiOutlineClose, AiOutlineCheck } from 'react-icons/ai';
 
-const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
+const Note = ({
+  id,
+  onRemoveNote,
+  color: initalColor,
+  content,
+  onUpdateNote,
+}) => {
   const colorOptions = [
     'bg-yellow-300',
     'bg-pink-300',
@@ -9,10 +15,9 @@ const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
     'bg-green-300',
   ];
 
-  
   const [color, setColor] = useState(() => {
     if (initalColor) return initalColor;
-    
+
     // 0,1,2,3
     const randomIndex = Math.floor(Math.random() * colorOptions.length);
     return colorOptions[randomIndex];
@@ -23,10 +28,20 @@ const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
   const textareaRef = useRef(null);
   useEffect(() => {
     if (textareaRef.current) {
+      textareaRef.current.style.height ='auto';
       textareaRef.current.style.height =
         textareaRef.current.scrollHeight + 'px';
     }
   }, [content]);
+
+  const handleContentChange = e => {
+    onUpdateNote(id, e.target.value, color);
+  };
+  
+  const handleColorChange = (newColor) =>{
+    setColor(newColor)
+    onUpdateNote(id,content, newColor);
+  }
 
   return (
     <div
@@ -58,6 +73,7 @@ const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
       <textarea
         ref={textareaRef}
         value={content}
+        onChange={handleContentChange}
         className={`w-full h-full bg-transparent resize-none border-none focus:outline-none text-gray-900 overflow-hidden`}
         aria-label="Edit Note"
         placeholder="메모를 작성하세요."
@@ -70,7 +86,7 @@ const Note = ({ id, onRemoveNote, color: initalColor, content }) => {
             <button
               key={index}
               className={`w-6 h-6 rounded-full cursor-pointer outline outline-gray-50 ${option}`}
-              onClick={() => setColor(option)}
+              onClick={() => handleColorChange(option)}
               aria-label={`Change color to ${option}`}
             />
           ))}
