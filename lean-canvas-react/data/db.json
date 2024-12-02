@@ -243,7 +243,16 @@
       "title": "bf35_새로운 린 캔버스",
       "lastModified": "2024-12-02 12:07:15",
       "category": "신규",
-      "id": 10
+      "id": 10,
+      "problem": {
+        "notes": [
+          {
+            "id": "9b0430c7-2174-42be-ace6-798ac68cd022",
+            "content": "",
+            "color": ""
+          }
+        ]
+      }
     }
   ]
 }
