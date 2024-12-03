@@ -9,6 +9,12 @@ function create(baseURL, options) {
   );
   return instance;
 }
+console.log('mode',import.meta.env.VITE_API_BASE_URL);
 
-export const canvases = create('http://localhost:8000/canvases/');
+// export const canvases = create(
+//   'https://json-server-vercel-opal.vercel.app/canvases/',
+// );
+export const canvases = create(
+  `${import.meta.env.VITE_API_BASE_URL}/canvases/`,
+);
 // export const posts = create('http://localhost:8000/posts/');
